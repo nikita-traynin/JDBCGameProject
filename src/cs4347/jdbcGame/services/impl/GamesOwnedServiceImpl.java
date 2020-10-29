@@ -40,17 +40,17 @@ public class GamesOwnedServiceImpl implements GamesOwnedService
     {
         // get connection from dataSource
     	Connection connection = dataSource.getConnection();
-    	GamesOwned newOwned;
+    	GamesOwned newOwned = null;
     	try {
     		// call GamesOwnedDAO.create
     		newOwned = dao.create(connection, gamesOwned);
-    		return newOwned;
     	}
     	finally 
     	{
     		// finally close connection
     		connection.close();
     	}
+    	return newOwned;
     }
 
     @Override

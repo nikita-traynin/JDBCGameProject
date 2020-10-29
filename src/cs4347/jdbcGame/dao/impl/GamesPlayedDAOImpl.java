@@ -195,7 +195,7 @@ public class GamesPlayedDAOImpl implements GamesPlayedDAO
         }
     }
 
-    final static String deleteSQL = "DELETE FROM GamesPlayed WHERE gameID = ?;";
+    final static String deleteSQL = "DELETE FROM GamesPlayed WHERE id = ?;";
 
     @Override
     public int delete(Connection connection, Long gamePlayedID) throws SQLException, DAOException
@@ -210,18 +210,15 @@ public class GamesPlayedDAOImpl implements GamesPlayedDAO
             ps = connection.prepareStatement(deleteSQL);
             ps.setLong(1, gamePlayedID);
 
-            //Find how many rows were deleted (should be one)
-    		Statement rowcount_stmt = connection.createStatement();
-    		ResultSet rowcount_rs = rowcount_stmt.executeQuery("SELECT  ROW_COUNT();");
-    		rowcount_rs.next();
-    		rowcount = rowcount_rs.getInt("ROW_COUNT()");
+            rowcount = ps.executeUpdate();
+            return rowcount;
         }
         finally {
             if (ps != null && !ps.isClosed()) {
                 ps.close();
             }
         }
-        return rowcount;
+        
     }
 
     final static String countSQL = "SELECT count(*) FROM GamesPlayed";

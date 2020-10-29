@@ -202,6 +202,7 @@ public class GamesOwnedDAOImpl implements GamesOwnedDAO
     @Override
     public int delete(Connection connection, Long gameOwnedID) throws SQLException, DAOException
     {
+    	int rowcount;
         if (gameOwnedID == null) {
             throw new DAOException("Trying to delete GamesOwned with NULL ID");
         }
@@ -210,9 +211,9 @@ public class GamesOwnedDAOImpl implements GamesOwnedDAO
         try {
             ps = connection.prepareStatement(deleteSQL);
             ps.setLong(1, gameOwnedID);
-
-            int rows = ps.executeUpdate();
-            return rows;
+            
+            rowcount = ps.executeUpdate();
+            return rowcount;
         }
         finally {
             if (ps != null && !ps.isClosed()) {
