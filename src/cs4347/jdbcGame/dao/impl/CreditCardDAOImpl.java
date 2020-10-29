@@ -24,7 +24,7 @@ import cs4347.jdbcGame.util.DAOException;
 
 public class CreditCardDAOImpl implements CreditCardDAO
 {
-    private static final String insertSQL = "INSERT INTO creditcard(ccName, ccNumber, expDate, securityCode, playerID) "
+    private static final String insertSQL = "INSERT INTO CreditCard(ccName, ccNumber, expDate, securityCode, playerID) "
             							  + "VALUES(?,?,?,?,?);";
     
     private static final String selectSQL = "SELECT * FROM CreditCard " 

@@ -73,30 +73,136 @@ public class PlayerServiceImpl implements PlayerService
     @Override
     public Player retrieve(Long playerID) throws DAOException, SQLException
     {
-        return null;
+
+        PlayerDAO playerDAO = new PlayerDAOImpl();
+
+        Connection connection = dataSource.getConnection();
+        try {
+            connection.setAutoCommit(false);
+            Player p1 = playerDAO.retrieve(connection, playerID);
+            connection.commit();
+            return p1;
+        } catch (Exception ex) {
+            connection.rollback();
+            throw ex;
+        }
+        finally {
+            if (connection != null) {
+                connection.setAutoCommit(true);
+            }
+            if (connection != null && !connection.isClosed()) {
+                connection.close();
+            }
+        }
     }
 
     @Override
     public int update(Player player) throws DAOException, SQLException
     {
+        if (player.getCreditCards() == null || player.getCreditCards().size() == 0) {
+            throw new DAOException("Player must have at lease one CreditCard");
+        }
+
+        Connection connection = dataSource.getConnection();
+        try {
+            connection.setAutoCommit(false);
+            PlayerDAO.update(connection, player);
+            Long playerID = p1.getId();
+            for (CreditCard creditCard : player.getCreditCards()) {
+                CreditCardDAO.update(connection, creditCard);
+            }
+            connection.commit();
+            return 1;
+        } catch (Exception ex) {
+            connection.rollback();
+            throw ex;
+        }
+        finally {
+            if (connection != null) {
+                connection.setAutoCommit(true);
+            }
+            if (connection != null && !connection.isClosed()) {
+                connection.close();
+            }
+        }
         return 0;
     }
 
     @Override
     public int delete(Long playerID) throws DAOException, SQLException
     {
-        return 0;
+        Connection connection = dataSource.getConnection();
+        try {
+            connection.setAutoCommit(false);
+            Player p1 = PlayerDAO.retrieve(connection, playerID);
+            PlayerDAO.delete(connection, playerID);
+            for (CreditCard creditCard : p1.getCreditCards()) {
+                creditCard.deleteForPlayer(playerID);
+                CreditCardDAO.deleteForPlayer(connection, playerID);
+            }
+            connection.commit();
+            return 1;
+        } catch (Exception ex) {
+            connection.rollback();
+            throw ex;
+        }
+        finally {
+            if (connection != null) {
+                connection.setAutoCommit(true);
+            }
+            if (connection != null && !connection.isClosed()) {
+                connection.close();
+            }
+        }
     }
 
     @Override
     public int count() throws DAOException, SQLException
     {
-        return 0;
+        Connection connection = dataSource.getConnection();
+        try {
+            connection.setAutoCommit(false);
+            int num = PlayerDAO.count(connection, playerID);
+            connection.commit();
+            return num;
+        } catch (Exception ex) {
+            connection.rollback();
+            throw ex;
+        }
+        finally {
+            if (connection != null) {
+                connection.setAutoCommit(true);
+            }
+            if (connection != null && !connection.isClosed()) {
+                connection.close();
+            }
+        }
     }
 
     @Override
     public List<Player> retrieveByJoinDate(Date start, Date end) throws DAOException, SQLException
     {
+
+        PlayerDAO playerDAO = new PlayerDAOImpl();
+
+        Connection connection = dataSource.getConnection();
+        try {
+            connection.setAutoCommit(false);
+            List<Player> listOfPlayers = PlayerDAO.retrieveByJoinDate(connection, start, end)
+            connection.commit();
+            return listOfPlayers;
+        } catch (Exception ex) {
+            connection.rollback();
+            throw ex;
+        }
+        finally {
+            if (connection != null) {
+                connection.setAutoCommit(true);
+            }
+            if (connection != null && !connection.isClosed()) {
+                connection.close();
+            }
+        }
         return null;
     }
 

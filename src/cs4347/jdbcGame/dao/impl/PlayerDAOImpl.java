@@ -27,20 +27,20 @@ import cs4347.jdbcGame.entity.CreditCard;
 public class PlayerDAOImpl implements PlayerDAO
 {
 
-    private static final String insertSQL = "INSERT INTO player (firstName, lastName, join_date, email) " 
+    private static final String insertSQL = "INSERT INTO Player (firstName, lastName, join_date, email) " 
     									  + "VALUES (?, ?, ?, ?);";
     
-    private static final String deleteSQL = "DELETE FROM player "
+    private static final String deleteSQL = "DELETE FROM Player "
     									  + "WHERE id = ?;";
     
-    private static final String selectSQL = "SELECT * FROM player "
+    private static final String selectSQL = "SELECT * FROM Player "
     									  + "WHERE id = ?;";
     
-    private static final String updateSQL = "UPDATE player "
+    private static final String updateSQL = "UPDATE Player "
     									  + "SET firstName = ?, lastName = ?, join_date = ?, email = ? "
     									  + "WHERE id = ?;";
     
-    private static final String select_betweenSQL = "SELECT * FROM player "
+    private static final String select_betweenSQL = "SELECT * FROM Player "
     											  + "WHERE join_date BETWEEN ? AND ?;";
     
     @Override
@@ -164,7 +164,7 @@ public class PlayerDAOImpl implements PlayerDAO
     	int rowcount = 0;
     	try {
 	    	Statement stmt = connection.createStatement();
-	    	ResultSet rowcount_rs = stmt.executeQuery("SELECT COUNT(*) FROM player;");
+	    	ResultSet rowcount_rs = stmt.executeQuery("SELECT COUNT(*) FROM Player;");
 	    	rowcount_rs.next();
 	    	rowcount = rowcount_rs.getInt("COUNT(*)");
 	        
@@ -229,5 +229,4 @@ public class PlayerDAOImpl implements PlayerDAO
     	}
         return player_list;
     }
-
 }
