@@ -72,7 +72,7 @@ public class GamesPlayedDAOImpl implements GamesPlayedDAO
         PreparedStatement ps = null;
         try {
             ps = connection.prepareStatement(selectSQL);
-            ps.setLong(3, gamePlayedID);
+            ps.setLong(1, gamePlayedID);
             ResultSet rs = ps.executeQuery();
             if (!rs.next()) {
                 return null;
@@ -98,8 +98,8 @@ public class GamesPlayedDAOImpl implements GamesPlayedDAO
         PreparedStatement ps = null;
         try {
             ps = connection.prepareStatement(retrieveByPlayerGameID);
-            ps.setLong(2, playerID);
-            ps.setLong(3, gameID);
+            ps.setLong(1, playerID);
+            ps.setLong(2, gameID);
             ResultSet rs = ps.executeQuery();
             
             while (rs.next()) {
@@ -123,8 +123,8 @@ public class GamesPlayedDAOImpl implements GamesPlayedDAO
         List<GamesPlayed> result = new ArrayList<GamesPlayed>();
         PreparedStatement ps = null;
         try {
-            ps = connection.prepareStatement(retrieveByPlayerGameID);
-            ps.setLong(3, gameID);
+            ps = connection.prepareStatement(retrieveByGameID);
+            ps.setLong(1, gameID);
             ResultSet rs = ps.executeQuery();
             
             while (rs.next()) {
@@ -149,7 +149,7 @@ public class GamesPlayedDAOImpl implements GamesPlayedDAO
         PreparedStatement ps = null;
         try {
             ps = connection.prepareStatement(retrieveByPlayer);
-            ps.setLong(2, playerID);
+            ps.setLong(1, playerID);
             ResultSet rs = ps.executeQuery();
             
             while (rs.next()) {
@@ -200,6 +200,7 @@ public class GamesPlayedDAOImpl implements GamesPlayedDAO
     @Override
     public int delete(Connection connection, Long gamePlayedID) throws SQLException, DAOException
     {
+    	int rowcount;
         if (gamePlayedID == null) {
             throw new DAOException("Trying to delete GamesPlayed with NULL ID");
         }
@@ -209,14 +210,18 @@ public class GamesPlayedDAOImpl implements GamesPlayedDAO
             ps = connection.prepareStatement(deleteSQL);
             ps.setLong(1, gamePlayedID);
 
-            int rows = ps.executeUpdate();
-            return rows;
+            //Find how many rows were deleted (should be one)
+    		Statement rowcount_stmt = connection.createStatement();
+    		ResultSet rowcount_rs = rowcount_stmt.executeQuery("SELECT  ROW_COUNT();");
+    		rowcount_rs.next();
+    		rowcount = rowcount_rs.getInt("ROW_COUNT()");
         }
         finally {
             if (ps != null && !ps.isClosed()) {
                 ps.close();
             }
         }
+        return rowcount;
     }
 
     final static String countSQL = "SELECT count(*) FROM GamesPlayed";
