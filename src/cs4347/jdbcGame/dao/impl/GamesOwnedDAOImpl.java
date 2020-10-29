@@ -88,7 +88,7 @@ public class GamesOwnedDAOImpl implements GamesOwnedDAO
         }
     }
     
-    final static String retrieveByPlayerGameID = "SELECT id, playerID, gameID, purchaseDate, purchasePrice FROM GamesOwned WHERE id = ?";
+    final static String retrieveByPlayerGameID = "SELECT id, playerID, gameID, purchaseDate, purchasePrice FROM GamesOwned WHERE playerID = ? AND gameID = ?;";
 
     @Override
     public GamesOwned retrievePlayerGameID(Connection connection, Long playerID, Long gameID)
@@ -118,7 +118,7 @@ public class GamesOwnedDAOImpl implements GamesOwnedDAO
         }  
     }
 
-    final static String retrieveByGameID = "SELECT id, playerID, gameID, purchaseDate, purchasePrice FROM GamesOwned WHERE id = ?";
+    final static String retrieveByGameID = "SELECT id, playerID, gameID, purchaseDate, purchasePrice FROM GamesOwned WHERE gameID = ?";
 
     @Override
     public List<GamesOwned> retrieveByGame(Connection connection, Long gameID) throws SQLException, DAOException
